@@ -1,9 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable quotes */
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Keychain from 'react-native-keychain';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import localStorage from '../../../utils/storageLocal';
 import ApiUsers from '../../apis/users';
 
 const initialState = {
@@ -18,7 +16,7 @@ const initialState = {
 export const Login = createAsyncThunk('login user', async data => {
   try {
     const res = await ApiUsers.Login(data.dataEmail, data.dataPassword);
-    localStorage.saveToLocal('token', res.data.result);
+    await Keychain.setGenericPassword(data.dataEmail, res.data);
     return res.data;
   } catch (error) {
     throw new Error(error);

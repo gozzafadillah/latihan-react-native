@@ -6,25 +6,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from './src/screens/Home';
 import Details from './src/screens/Details';
 import LoginScreen from './src/screens/Login';
-import localStorage from './src/utils/storageLocal';
 
 const Stack = createNativeStackNavigator();
 
-const checkToken = () => {
-  const token = localStorage.getFromLocal('token');
-  console.log(token);
-  if (!token.token) {
-    return false;
-  }
-  return true;
-};
-
 function App() {
-  console.log(checkToken());
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={checkToken() === true ? 'Home' : 'Login'}>
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"
           component={LoginScreen}
