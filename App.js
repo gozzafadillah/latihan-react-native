@@ -1,38 +1,75 @@
-import axios from 'axios';
-import React, {useEffect, useState} from 'react';
-import {Button, Text, View} from 'react-native';
+/* eslint-disable prettier/prettier */
+/* eslint-disable react-native/no-inline-styles */
+import * as React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Home from './src/screens/Home';
+import Details from './src/screens/Details';
+import LoginScreen from './src/screens/Login';
+import localStorage from './src/utils/storageLocal';
 
-const App = () => {
-  const [data, setData] = useState(undefined);
-  const [text, setText] = useState('hello world ');
-  const changeText = () => {
-    setText('Hello Fadil');
-  };
+const Stack = createNativeStackNavigator();
 
-  useEffect(() => {
-    axios({
-      method: 'get',
-      url: `https://dummyjson.com/users`,
-    }).then(response => setData(response.data));
-  }, []);
-
-  return (
-    <View>
-      <View
-        style={{
-          marginTop: 20,
-          marginBottom: 20,
-          padding: 20,
-          gap: 20,
-          display: 'flex',
-          alignItems: 'center',
-        }}>
-        {data?.users.map(val => (
-          <Text key={val.id}>{val.firstName}</Text>
-        ))}
-      </View>
-    </View>
-  );
+const checkToken = () => {
+  const token = localStorage.getFromLocal('token');
+  console.log(token);
+  if (!token.token) {
+    return false;
+  }
+  return true;
 };
+
+function App() {
+  console.log(checkToken());
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName={checkToken() === true ? 'Home' : 'Login'}>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            title: 'Login',
+            headerStyle: {
+              backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: 'My Home',
+            headerStyle: {
+              backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Detail"
+          component={Details}
+          options={{
+            title: 'Detail',
+            headerStyle: {
+              backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 export default App;
