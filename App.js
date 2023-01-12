@@ -10,21 +10,17 @@ import localStorage from './src/utils/storageLocal';
 
 const Stack = createNativeStackNavigator();
 
-const checkToken = () => {
-  const token = localStorage.getFromLocal('token');
-  console.log(token);
-  if (!token.token) {
-    return false;
-  }
-  return true;
-};
-
 function App() {
+  const checkToken = () => {
+    const token = localStorage.getFromLocal('token');
+    return !token ? true : false;
+  };
+
   console.log(checkToken());
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={checkToken() === true ? 'Home' : 'Login'}>
+        initialRouteName={checkToken() === true ? 'Login' : 'Home'}>
         <Stack.Screen
           name="Login"
           component={LoginScreen}

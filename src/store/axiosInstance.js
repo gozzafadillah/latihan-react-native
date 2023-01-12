@@ -3,10 +3,7 @@ import axios from 'axios';
 import {requestHandler} from './interceptor';
 
 const config = {
-  baseURL: 'http://localhost:8080',
-  Headers: {
-    'content-type': 'multipart/form-data',
-  },
+  baseURL: 'https://2782-103-112-189-131.ap.ngrok.io',
 };
 
 const axiosInstance = axios.create(config);

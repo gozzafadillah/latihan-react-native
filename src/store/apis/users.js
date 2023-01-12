@@ -13,6 +13,14 @@ const ApiUsers = {
       return error;
     }
   },
+  async GetHealth() {
+    try {
+      const res = await axiosInstance.get('/users/health');
+      return res.data;
+    } catch (error) {
+      return error;
+    }
+  },
 };
 
 export default ApiUsers;

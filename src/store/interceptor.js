@@ -10,7 +10,6 @@ export const isHandlerEnabled = config => {
 export const requestHandler = async config => {
   if (isHandlerEnabled(config)) {
     const token = await localStorage.getFromLocal('token');
-    console.log('token saya', token.token);
     if (token) {
       config.headers.Authorization = `Bearer ${token.token}`;
     }

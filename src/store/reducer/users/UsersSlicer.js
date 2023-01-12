@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable quotes */
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import localStorage from '../../../utils/storageLocal';
 import ApiUsers from '../../apis/users';
@@ -9,6 +8,7 @@ import ApiUsers from '../../apis/users';
 const initialState = {
   data: {
     token: '',
+    health: null,
   },
   status: false,
   fecthStatus: 'idle',
@@ -20,6 +20,15 @@ export const Login = createAsyncThunk('login user', async data => {
     const res = await ApiUsers.Login(data.dataEmail, data.dataPassword);
     localStorage.saveToLocal('token', res.data.result);
     return res.data;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+export const GetuserHealth = createAsyncThunk('get health', async () => {
+  try {
+    const res = await ApiUsers.GetHealth();
+    return res;
   } catch (error) {
     throw new Error(error);
   }
@@ -38,6 +47,17 @@ const UserSlice = createSlice({
         state.data.token = action.payload.result;
       })
       .addCase(Login.rejected, (state, action) => {
+        state.fecthStatus = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(GetuserHealth.pending, state => {
+        state.fecthStatus = 'loading';
+      })
+      .addCase(GetuserHealth.fulfilled, (state, action) => {
+        state.fecthStatus = 'success';
+        state.data.health = action.payload.result;
+      })
+      .addCase(GetuserHealth.rejected, (state, action) => {
         state.fecthStatus = 'failed';
         state.error = action.error.message;
       });
